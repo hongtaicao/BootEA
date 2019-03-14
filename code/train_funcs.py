@@ -24,7 +24,7 @@ g = 1000000000
 
 def get_model(folder):
     print("data folder:", folder)
-    if "15" in folder:
+    if "DBP15K" in folder:
         read_func = ut.read_dbp15k_input
     else:
         read_func = ut.read_input

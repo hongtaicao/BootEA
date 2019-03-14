@@ -96,6 +96,7 @@ def cal_rank_multi_embed(frags, dic, sub_embed, embed, top_k):
     sim_mat = np.matmul(sub_embed, embed.T)
     prec_set = set()
     aligned_e = None
+    rank_map = dict()
     for i in range(len(frags)):
         ref = frags[i]
 
@@ -131,10 +132,11 @@ def cal_rank_multi_embed(frags, dic, sub_embed, embed, top_k):
                     num1[j] += 1
 
         prec_set.add((ref, aligned_e))
+        rank_map[ref] = rank
 
     del sim_mat
     gc.collect()
-    return mean, mrr, num, mean1, mrr1, num1, prec_set
+    return mean, mrr, num, mean1, mrr1, num1, prec_set, rank_map
 
 
 def eval_alignment_multi_embed(embed1, embed2, top_k, selected_pairs, mess=""):
@@ -166,8 +168,10 @@ def eval_alignment_multi_embed(embed1, embed2, top_k, selected_pairs, mess=""):
     pool.close()
     pool.join()
 
+    # add for writing out final alignment
+    rank_result = dict()
     for res in reses:
-        mean, mrr, num, mean1, mrr1, num1, prec_set = res.get()
+        mean, mrr, num, mean1, mrr1, num1, prec_set, rank_map = res.get()
         t_mean += mean
         t_mrr += mrr
         t_num += num
@@ -175,6 +179,7 @@ def eval_alignment_multi_embed(embed1, embed2, top_k, selected_pairs, mess=""):
         t_mrr1 += mrr1
         t_num1 += num1
         t_prec_set |= prec_set
+        rank_result.update(rank_map)
 
     assert len(t_prec_set) == ref_num
 
@@ -193,4 +198,4 @@ def eval_alignment_multi_embed(embed1, embed2, top_k, selected_pairs, mess=""):
         t_mrr1 /= ref_num
         print("{}, hits@{} = {}, mr = {:.3f}, mrr = {:.3f}, time = {:.3f} s ".format(mess, top_k, acc1, t_mean1, t_mrr1,
                                                                                      time.time() - t))
-    return t_prec_set
+    return t_prec_set, rank_result

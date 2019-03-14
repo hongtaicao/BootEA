@@ -137,7 +137,7 @@ class KGE_Model:
         refs2_embed = tf.nn.l2_normalize(refs2_embed, 1)
         refs1_embed = refs1_embed.eval(session=self.session)
         refs2_embed = refs2_embed.eval(session=self.session)
-        prec_set = eval_alignment_multi_embed(refs1_embed, refs2_embed, P.ent_top_k, selected_pairs, mess="ent alignment")
+        prec_set, rank_map = eval_alignment_multi_embed(refs1_embed, refs2_embed, P.ent_top_k, selected_pairs, mess="ent alignment")
         t2 = time.time()
         m1 = psutil.virtual_memory().used
         del refs1_embed, refs2_embed
@@ -145,7 +145,7 @@ class KGE_Model:
         # print("gc costs {:.3f} s, mem change {:.6f} G".format(time.time() - t2,
         #                                                       (psutil.virtual_memory().used - m1) / g))
         print("testing ent alignment costs: {:.3f} s\n".format(time.time() - t1))
-        return prec_set
+        return prec_set, rank_map
 
     def eval_ent_embeddings(self):
         return self.ent_embeddings.eval(session=self.session)

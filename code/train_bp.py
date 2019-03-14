@@ -3,8 +3,6 @@ import itertools
 import gc
 
 import numpy as np
-import igraph as ig
-import networkx as nx
 from model import P
 
 
@@ -124,6 +122,7 @@ def mwgm_graph_tool(pairs, sim_mat):
 
 
 def mwgm_igraph(pairs, sim_mat):
+    import igraph as ig
     if not isinstance(pairs, list):
         pairs = list(pairs)
     index_id_dic1, index_id_dic2 = dict(), dict()
@@ -151,6 +150,7 @@ def mwgm_igraph(pairs, sim_mat):
 
 
 def mwgm_networkx(pairs, sim_mat):
+    import networkx as nx
     def str_splice(prefix, index):
         return prefix + "_" + str(index)
 

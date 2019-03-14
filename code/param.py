@@ -7,7 +7,7 @@ class Params:
 
         self.top_k = 20
 
-        self.ent_top_k = [1, 5, 10, 50]
+        self.ent_top_k = [1, 5, 10, 50, 100]
         self.nums_threads = 10
 
         self.lambda_1 = 0.01
