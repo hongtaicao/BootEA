@@ -1,7 +1,16 @@
 import numpy as np
 import time
+import os
 
 from triples import Triples
+
+
+def get_mapping_size(folder):
+    entity_size = 0
+    for fname in ['ent_ids_1', 'ent_ids_2']:
+        with open(os.path.join(folder, fname), 'r') as r:
+            entity_size += len(r.readlines())
+    return entity_size
 
 
 def read_input(folder):
@@ -10,6 +19,10 @@ def read_input(folder):
     triples1 = Triples(triples_set1)
     triples2 = Triples(triples_set2)
     total_ent_num = len(triples1.ents | triples2.ents)
+    # the above assumes all seed and test entity appear in the knowledge graph
+    # which does not hold for some datasets
+    # obtain entity count from mapping (superset)
+    total_ent_num = get_mapping_size(folder)
     total_rel_num = len(triples1.props | triples2.props)
     total_triples_num = len(triples1.triple_list) + len(triples2.triple_list)
     print('total ents:', total_ent_num)
@@ -28,6 +41,8 @@ def read_dbp15k_input(folder):
     triples1 = Triples(triples_set1)
     triples2 = Triples(triples_set2)
     total_ent_num = len(triples1.ents | triples2.ents)
+    # obtain entity count from mapping (superset)
+    total_ent_num = get_mapping_size(folder)
     total_rel_num = len(triples1.props | triples2.props)
     total_triples_num = len(triples1.triple_list) + len(triples2.triple_list)
     print('total ents:', total_ent_num)
