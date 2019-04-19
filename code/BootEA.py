@@ -14,7 +14,8 @@ def write_alignment(folder, model, rank_map):
     with open(outpath, 'w') as w:
         for kth, ranking in sorted(rank_map.items(), key=lambda x:x[0]):
             rank_list = ranking[:100]
-            w.write('%d\t%s\n' % (np.int(kth), ','.join(rank_list.tolist())))
+            w.write('%d\t%s\n' % (np.int(kth), \
+                ','.join([str(i) for i in rank_list.tolist()])))
     print('write final alignment:', outpath)
 
 

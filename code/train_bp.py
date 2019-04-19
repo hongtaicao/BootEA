@@ -69,7 +69,10 @@ def check_alignment(aligned_pairs, all_n, context="", is_cal=True):
         recall = round(num / all_n, 6)
         if recall > 1.0:
             recall = round(num / all_n, 6)
-        f1 = round(2 * precision * recall / (precision + recall), 6)
+        if precision + recall != 0:
+            f1 = round(2 * precision * recall / (precision + recall), 6)
+        else:
+            f1 = 0
         print("precision={}, recall={}, f1={}".format(precision, recall, f1))
 
 
