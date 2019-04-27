@@ -145,12 +145,14 @@ def generate_neighbours_multi_embed(embed, ent_list, k):
     ent_frags = ut.div_list(np.array(ent_list), P.nums_threads)
     ent_frag_indexes = ut.div_list(np.array(range(len(ent_list))), P.nums_threads)
     # multiprocessing will fail if the object is too large
+    '''
     dic = dict()
     for i in range(len(ent_frags)):
         res = cal_neighbours_embed(ent_frags[i], np.array(ent_list), \
             embed[ent_frag_indexes[i], :], embed, k)
         dic = ut.merge_dic(dic, res)
     return dic
+    '''
     # skip the code below
     pool = multiprocessing.Pool(processes=len(ent_frags))
     results = list()
